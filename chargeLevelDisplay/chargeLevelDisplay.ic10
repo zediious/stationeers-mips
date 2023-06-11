@@ -1,0 +1,25 @@
+# Battery Charge Level Display
+
+# Definitions
+alias powerDisplay d0
+alias battery01 d2
+alias battery02 d1
+alias totalCharge r0
+alias b01Charge r1
+alias b02Charge r2
+
+# Start
+start:
+
+# Load charge levels to memory
+l b01Charge battery01 Charge
+l b02Charge battery02 Charge
+
+# Add charge levels and store
+add totalCharge b01Charge b02Charge
+
+# Display total charge on screen
+s powerDisplay Setting totalCharge
+
+# Loop
+j start

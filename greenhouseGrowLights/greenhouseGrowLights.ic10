@@ -1,0 +1,34 @@
+# Grow Light Operation
+
+# This script will turn off Grow Lights on the
+# network if the sun is out, and will turn the
+# Grow Lights on if the sun is not out.
+
+# Definitions
+define growLightHash -1758710260
+alias sensor d0
+alias sensorReading r3
+alias sunny r2
+
+# Define booleans to use for turning on/off
+alias onBoolean r0
+alias offBoolean r1
+move r0 1
+move r1 0
+
+start:
+
+# Check if sun is out
+l sensorReading sensor Activate
+
+# If the sun is out, jump to growLightOff
+bgtz sensorReading growLightOff
+
+# Turn on lights if not sunny
+sb growLightHash On onBoolean
+j start
+
+growLightOff:
+# To turn off grow lights
+sb growLightHash On offBoolean
+j start

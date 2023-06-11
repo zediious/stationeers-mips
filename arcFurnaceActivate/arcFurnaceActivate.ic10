@@ -1,0 +1,32 @@
+# Arc Furnace Activation
+
+# Definitions
+alias furnace d0
+
+start:
+yield
+
+# Check if slot 0 of furnace is occupied
+ls r0 furnace 0 Occupied
+
+# Turn furnace on if slot was occupied
+s furnace On r0
+
+# If slot is not occupied, jump back to start
+beqz r0 start
+yield
+
+# If slot was occupied, activate the furnace
+s furnace Activate r0
+
+# Check item slot quantity, loop until count is 0
+inuse:
+ls r0 furnace 0 Quantity
+s db Setting r0
+bnez r0 inuse
+
+# Turn off furnace after items are smelted
+s furnace On 0
+
+# Jump back to start
+j start

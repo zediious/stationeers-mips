@@ -1,0 +1,63 @@
+# Temperature Control
+
+# This script will turn on cooler if temp goes
+# above 300k, and turn the heater on if the temp
+# goes below 291k. If the temp is between
+# 295k and 296k, turn off both cooler/heater
+
+# Definitions
+define minTemp 291
+define midTempRange1 295
+define midTempRange2 296
+define maxTemp 300
+
+alias gasSensor d0
+alias heater d1
+alias cooler d2
+
+alias currentTemp r0
+alias tooCold r1
+alias tooHot r2
+alias midCheck1 r3
+alias midCheck2 r4
+alias midCheckFinal r5
+
+start:
+
+# Get current temp and set to memory
+l currentTemp gasSensor Temperature
+
+# Check if too cold
+slt tooCold currentTemp minTemp
+bgtz tooCold doIfCold
+
+# Check if too hot
+slt tooHot maxTemp currentTemp
+bgtz tooHot doIfHot
+
+# Check if within mid range
+slt midCheck1 midTempRange1 currentTemp
+slt midCheck2 currentTemp midTempRange2
+and midCheckFinal midCheck1 midCheck2
+bgtz midCheckFinal doIfMid
+
+ # If neither, loop
+j start
+
+doIfCold:
+# If temp too cold, turn on heater/turn off cool
+s heater On 1
+s cooler On 0
+j start
+
+doIfHot:
+# If temp too hot, turn on cooler/turn on heater
+s cooler On 1
+s heater On 0
+j start
+
+doIfMid:
+# If temp was mid, turn off heater and cooler
+s cooler On 0
+s heater On 0
+j start
