@@ -1,0 +1,44 @@
+# Gas Canister Stop Fill
+
+# This script will check if a given gas tank is
+# above 2000 pressure. If it is, it will shut
+# a digital valve that leads to it. If the tank
+# pressure is not too high, the valve is opened.
+
+# Device definitions
+alias valve d0
+alias tank d1
+
+# Register definitions
+alias currentPressure r0
+alias pressureTooHigh r1
+
+# Constant definitions
+define maxPressure 2000
+
+start:
+
+# Load current pressure from tank
+l currentPressure tank Pressure
+
+# Check if current pressure is higher than max
+slt pressureTooHigh maxPressure currentPressure
+
+# If pressure to0 high, jump to pressureWasTooHigh
+bgtz pressureTooHigh pressureWasTooHigh
+
+# Open the valve if pressure was not too high
+s valve On 1
+
+# Jump to start if pressure was not too high
+yield
+j start
+
+# This code is ran if the pressure was too high
+pressureWasTooHigh:
+
+# Close valve to tank
+s valve On 0
+
+yield
+j start
