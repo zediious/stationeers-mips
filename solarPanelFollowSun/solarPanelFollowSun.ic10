@@ -1,0 +1,31 @@
+# Solar Panel Sun Tracking
+
+# Define constants
+define solarPanelHash -539224550
+
+# Define devices
+alias daylightSensor d0
+
+# Define registers
+alias sunVerticalInit r0
+alias sunHorizontalInit r1
+alias sunVerticalFinal r2
+alias sunHorizontalFinal r3
+
+start:
+
+# Load current sun readings to registers
+l sunVerticalInit daylightSensor Vertical
+l sunHorizontalInit daylightSensor Horizontal
+
+# Add offset
+add sunVerticalFinal sunVerticalInit 90
+add sunHorizontalFinal sunHorizontalInit 90
+
+# Batch write to Solar Panel (Dual) on network
+sb solarPanelHash Vertical sunVerticalFinal
+sb solarPanelHash Horizontal sunHorizontalFinal
+
+# Loop
+yield
+j start
