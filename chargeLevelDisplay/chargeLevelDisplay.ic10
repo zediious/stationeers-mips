@@ -11,7 +11,7 @@ alias totalCharge r0
 start:
 
 # Batch load all charge levels as a sum
-lb totalCharge stationBatteryHash Charge 1
+lb totalCharge stationBatteryHash Charge Sum
 
 # Display total charge on screen
 s powerDisplay Setting totalCharge
