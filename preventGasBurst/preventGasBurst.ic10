@@ -1,7 +1,7 @@
 # Pipe Burst Prevention
 
 # Check a pipe sensor for pressure reading
-# If higher than 55,000 kPa, turn off
+# If higher than 10,000 kPa, turn off
 # both mixers
 
 # Definitions
@@ -12,7 +12,7 @@ alias sensor d2
 alias pressureReading r0
 alias pressureTooHigh r1
 
-define maxPressure 55000
+define maxPressure 10000
 
 start:
 
@@ -26,6 +26,8 @@ bgtz pressureTooHigh pressureWastooHigh
 # If not, turn on mixers and loop
 s mixer1 On 1
 s mixer2 On 1
+s mixer2 Lock 0
+s mixer1 Lock 0
 yield
 j start
 
@@ -33,7 +35,9 @@ j start
 pressureWastooHigh:
 
 # Turn off both mixers
+s mixer1 Lock 1
 s mixer1 On 0
+s mixer2 Lock 1
 s mixer2 On 0
 
 # Loop
