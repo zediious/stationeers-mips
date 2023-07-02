@@ -12,6 +12,7 @@ start:
 lb totalCharge stationBatteryHash Charge Sum
 
 # Display total charge on screen
+s powerDisplay Mode 2
 s powerDisplay Setting totalCharge
 
 # Loop
